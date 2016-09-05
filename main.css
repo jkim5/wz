@@ -23,7 +23,7 @@ body{
 a{text-decoration: none}
 a:visited{ color:blue}
 a:active{ color:black}
-/*a:hover{ color:black}*/
+a:hover{ color:black}
 
 .container, .pop{
   /*border: 1px solid black;*/
