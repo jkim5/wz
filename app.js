@@ -81,6 +81,7 @@ $('#getStatus').click(function(){
         .done(function( data ) {
 
           timeSinceStart = data.result;
+          timeSinceStart = timeSinceStart / 3600; // convert seconds to hours
 
           $('#getStatus').html('temperature')
           clearInterval(wait);
@@ -88,7 +89,7 @@ $('#getStatus').click(function(){
           popup(
             temperature + 'º'
             + '<br>' +
-            tempRise + 'º rise in ' + tineSinceStart
+            tempRise + 'º rise in ' + timeSinceStart;
           )
 
         // })
