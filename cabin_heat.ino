@@ -15,7 +15,9 @@ DHT dht(DHT_SENSOR_PIN, DHTTYPE);
 int led = D0; // This is where your LED is plugged in.
 double temperature;
 double humidity;
-
+double originalTemp;
+int timeSinceStart;
+int timeStarted;
 
 
 void setup() {
@@ -37,6 +39,8 @@ void setup() {
     // We are going to declare a Spark.variable() here so that we can access the value of the DHT from the cloud.
     Spark.variable("temperature", &temperature, DOUBLE);
     Spark.variable("humidity", &humidity, DOUBLE);
+    Spark.variable("originalTemp", &originalTemp, DOUBLE);
+    Spark.variable("timeSinceStart", &timeSinceStart, INT);
 
     // This is saying that when we ask the cloud for the function "led", it will employ the function ledToggle() from this app.
     Spark.function("led",ledToggle);
@@ -48,6 +52,7 @@ void loop() {
 
 temperature = dht.getTempFarenheit();
 humidity = dht.getHumidity();
+timeSinceStart = Time.now() - timeStarted;   // time that the last 'on' command was given in seconds
 delay(5000);
 
 }
@@ -58,6 +63,8 @@ int ledToggle(String command) {
 
     if (command=="on") {
         digitalWrite(led,HIGH);
+        timeStarted = Time.now();             // set the start time in seconds 
+        originalTemp = dht.getTempFarenheit();         // set original temperature
         return 1;
     }
     else if (command=="off") {
