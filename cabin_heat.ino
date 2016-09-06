@@ -52,7 +52,14 @@ void loop() {
 
 temperature = dht.getTempFarenheit();
 humidity = dht.getHumidity();
-timeSinceStart = Time.now() - timeStarted;   // time that the last 'on' command was given in seconds
+
+    if (digitalRead(led)==HIGH) {                    // only calculate timeSinceStart if the heaters are on. Should HIGH be '1' instead?
+        timeSinceStart = Time.now() - timeStarted;   // time that the last 'on' command was given in seconds
+    }
+    else {
+        timeSinceStart = 0;
+    }
+
 delay(5000);
 
 }

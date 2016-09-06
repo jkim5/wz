@@ -75,7 +75,7 @@ $('#getStatus').click(function(){
       .done(function( data ) {
         originalTemp = data.result;
 
-        tempRise = temperature - originalTemp; //calculate the rise in temp since turning on the heat. // can we get the time through the particle servers?
+        tempRise = temperature - originalTemp; //calculate the rise in temp since turning on the heat. 
 
         $.get( baseURL + coreID + "/timeSinceStart" +  "?access_token=" + accessToken)
         .done(function( data ) {
