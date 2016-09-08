@@ -6,170 +6,148 @@ var baseURL = "https://api.particle.io/v1/devices/";
 // var url = baseURL + coreID + "/" + method;
 
 var temperature; var humidity; var originalTemp; var tempRise; var timeSinceStart;
-
 var wait;
 
 $('#heatON').click(function(){
 
-  waiting('#heatON', 100);
+  $('#heatON').html('🔥').addClass('spin');
+  $('#heatOFF').html('')
+  $('#getStatus').html('')
 
   $.post( baseURL + coreID + "/led" +  "?access_token=" + accessToken, { args: "on" })
   .done(function( data ) {
 
-    $('#heatON').html('turn on heat')
-    clearInterval(wait);
-
     console.log(data );
-    popup('heat is now on!')
+    popup('heat is on!')
+    clearWait();
 
   }).fail(function() {
 
     popup('error: could not connect to wz')
     console.error("Could not connect");
-
-    $('#heatON').html('turn on heat')
-    clearInterval(wait);
+    clearWait();
 
   });
 });
 
 $('#heatOFF').click(function(){
 
-  waiting('#heatOFF', 100);
+  $('#heatOFF').html('⛄️').addClass('spin');
+  $('#heatON').html('')
+  $('#getStatus').html('')
 
   $.post( baseURL + coreID + "/led" +  "?access_token=" + accessToken, { args: "off" })
   .done(function( data ) {
 
-      $('#heatOFF').html('turn off heat')
-      clearInterval(wait);
-
       console.log(data);
       popup('heat is now off.')
+      clearWait();
 
   }).fail(function() {
 
     popup('error: could not connect to wz')
     console.error("Could not connect");
-
-    $('#heatOFF').html('turn off heat')
-    clearInterval(wait);
+    clearWait();
 
   })
 });
 
 $('#getStatus').click(function(){
 
-  waiting('#getStatus', 100);
+  $('#getStatus').html('🌡').addClass('spin');
+  $('#heatON').html('')
+  $('#heatOFF').html('')
 
   $.get( baseURL + coreID + "/temperature" +  "?access_token=" + accessToken)
   .done(function( data ) {
-
-  var roundedResult = Math.round(data.result * 10) / 10
-  temperature = roundedResult;
-
-    // $.get( baseURL + coreID + "/humidity" +  "?access_token=" + accessToken)
-    // .done(function( data ) {
-    //   humidity = data.result;
+    console.log(data);
+    temperature = Math.round( data.result * 10) / 10; ;
 
       $.get( baseURL + coreID + "/originalTemp" +  "?access_token=" + accessToken)
       .done(function( data ) {
-        originalTemp = data.result;
+        console.log(data);
+        originalTemp = data.result
 
-        tempRise = temperature - originalTemp; //calculate the rise in temp since turning on the heat. 
+        tempRise = Math.round( (temperature - originalTemp) * 10) / 10; //calculate the rise in temp since turning on the heat.
 
-        $.get( baseURL + coreID + "/timeSinceStart" +  "?access_token=" + accessToken)
+        $.get( baseURL + coreID + "/tSinceStart" +  "?access_token=" + accessToken)
         .done(function( data ) {
-
+          console.log(data);
           timeSinceStart = data.result;
-          timeSinceStart = timeSinceStart / 3600; // convert seconds to hours
 
-          $('#getStatus').html('temperature')
-          clearInterval(wait);
+          // $.get( baseURL + coreID + "/humidity" +  "?access_token=" + accessToken)
+          // .done(function( data ) {
+          //   humidity = data.result;
 
-          popup(
-            temperature + 'º'
-            + '<br>' +
-            tempRise + 'º rise in ' + timeSinceStart;
-          )
+          if(timeSinceStart == 0){
+            popup(
+              temperature + 'º'
+              + '<br>' +
+              'heat is off.'
+              // + '<br>' +
+              // humidity + '% humidity'
+            )
+          }else{
+            popup(
+              temperature + 'º'
+              + '<br>' +
+              'heat is on!'
+              + '<br>' +
+              tempRise + 'º rise in '
+              + hhmmss(timeSinceStart)
+              // + '<br>' +
+              // humidity + '% humidity'
+            )
+          }
+          clearWait();
 
-        // })
-      })
-    })
+        // }) //humidity close
+      }) // originalTemp close
+    }) //tSinceStart close
   }).fail(function() {
     popup('error: could not connect to wz')
     console.error("Could not connect");
-
-    $('#getStatus').html('temperature')
-    clearInterval(wait);
-
+    clearWait();
   })
 
 });
 
-// $('#tempFETCH').click(function(){
-//
-//   $.get( baseURL + coreID + "/temperature" +  "?access_token=" + accessToken)
-//   .done(function( data ) {
-//     console.log(data);
-//       var roundedResult = Math.round(data.result * 10) / 10
-//       popup(roundedResult + 'º')
-//
-//   }).fail(function() {
-//     popup('ERROR: could not connect to WZ')
-//     console.error("Could not connect");
-//   })
-//
-// });
-//
-// $('#humidFETCH').click(function(){
-//
-//   $.get( baseURL + coreID + "/humidity" +  "?access_token=" + accessToken)
-//   .done(function( data ) {
-//     console.log(data);
-//       popup(data.result + " %")
-//
-//   }).fail(function() {
-//     popup('ERROR: could not connect to WZ')
-//     console.error("Could not connect");
-//   })
-//
-// });
-
   //a generic popup message in the middle of the screen with a white background.
   function popup(message){
-
+    $('.pop').show().css('display', 'flex');
     $('.message').html(message);
-    $('.pop').fadeIn().css('display', 'flex');
+  }
 
-    setTimeout(function(){
-        $('.pop').fadeOut();
-    },2000)
+  function clearWait(){
+        $('#heatON').html('turn on heat').removeClass('spin');
+        $('#heatOFF').html('turn off heat').removeClass('spin');
+        $('#getStatus').html('temperature').removeClass('spin');
+  }
 
+  function hhmmss(secs) {
+    var minutes = Math.floor(secs / 60);
+    secs = secs%60;
+    var hours = Math.floor(minutes/60)
+    minutes = minutes%60;
+
+    // function pad(num) {
+    //   return ("0"+num).slice(-2);
+    // }
+    // return pad(hours)+"h "+pad(minutes)+"m "+pad(secs)+"s";
+
+    if(hours >= 1){
+      return hours+"h "+minutes+"m "+secs+"s";
+    }else if(hours < 1 && minutes >= 1){
+      return minutes+"m "+secs+"s";
+    } else if(hours < 1 && minutes < 1 ) {
+      return secs+"s";
+    }
 
   }
 
-
-  function waiting(selector, speed){
-    var pos = 0;
-    wait = setInterval(function(){
-      if(pos == 0){
-        $(selector).html('|---')
-      }
-      if(pos == 1){
-        $(selector).html('-|--')
-      }
-      if(pos == 2){
-        $(selector).html('--|-')
-      }
-      if(pos == 3){
-        $(selector).html('---|')
-      }
-
-      if( pos > 3 ){ pos = 0 }else{ pos++ }
-
-    }, speed);
-
-  }
+  $('.pop').click(function(){
+    $('.pop').fadeOut();
+  })
 
 })
 

@@ -16,8 +16,8 @@ int led = D0; // This is where your LED is plugged in.
 double temperature;
 double humidity;
 double originalTemp;
-int timeSinceStart;
-int timeStarted;
+int tSinceStart;
+int tStarted;
 
 
 void setup() {
@@ -40,7 +40,8 @@ void setup() {
     Spark.variable("temperature", &temperature, DOUBLE);
     Spark.variable("humidity", &humidity, DOUBLE);
     Spark.variable("originalTemp", &originalTemp, DOUBLE);
-    Spark.variable("timeSinceStart", &timeSinceStart, INT);
+    Spark.variable("timeSinceStart", &tSinceStart, INT);
+    Spark.variable("timeStarted", &tStarted, INT); //just for debugging
 
     // This is saying that when we ask the cloud for the function "led", it will employ the function ledToggle() from this app.
     Spark.function("led",ledToggle);
@@ -54,10 +55,10 @@ temperature = dht.getTempFarenheit();
 humidity = dht.getHumidity();
 
     if (digitalRead(led)==HIGH) {                    // only calculate timeSinceStart if the heaters are on. Should HIGH be '1' instead?
-        timeSinceStart = Time.now() - timeStarted;   // time that the last 'on' command was given in seconds
+        tSinceStart = Time.now() - tStarted;   // time that the last 'on' command was given in seconds
     }
     else {
-        timeSinceStart = 0;
+        tSinceStart = 0;
     }
 
 delay(5000);
@@ -65,12 +66,13 @@ delay(5000);
 }
 
 
+
 // Finally, we will write out our ledToggle function, which is referenced by the Spark.function() called "led"
 int ledToggle(String command) {
 
     if (command=="on") {
         digitalWrite(led,HIGH);
-        timeStarted = Time.now();             // set the start time in seconds 
+        tStarted = Time.now();             // set the start time in seconds
         originalTemp = dht.getTempFarenheit();         // set original temperature
         return 1;
     }

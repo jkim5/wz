@@ -11,7 +11,7 @@ html {
 body{
   height:100%;
   font-family: 'Lora', serif;
-  font-size: 10vw;
+  font-size: 7vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -44,6 +44,14 @@ a:hover{ color:black}
   display: none;
 }
 
+
+.spin {  
+animation: cssAnimation 2s infinite ease;
+}
+@keyframes cssAnimation {
+from { transform: rotate(0deg)}
+to { transform: rotate(360deg)}
+}
 
 
 
