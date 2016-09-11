@@ -12,7 +12,9 @@
 
 DHT dht(DHT_SENSOR_PIN, DHTTYPE);
 
+int autotimer = 14000; // number of seconds to auto shutoff. 14000 = 4 hours
 int led = D0; // This is where your LED is plugged in.
+
 double temperature;
 double humidity;
 double originalTemp;
@@ -56,6 +58,7 @@ humidity = dht.getHumidity();
 
     if (digitalRead(led)==HIGH) {                    // only calculate timeSinceStart if the heaters are on. Should HIGH be '1' instead?
         tSinceStart = Time.now() - tStarted;   // time that the last 'on' command was given in seconds
+        autoShutoff();                          // turn off heater if > than autotimer
     }
     else {
         tSinceStart = 0;
@@ -84,5 +87,12 @@ int ledToggle(String command) {
         return -1;
     }
 
+}
+
+void autoShutoff() {
+    if tSinceStart > autotimer {
+        digitalWrite(led,LOW);
+        tSinceStart = 0;
+    }
 }
 
