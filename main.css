@@ -2,14 +2,17 @@
 
 html {
   box-sizing: border-box;
-  height:100%;
+  height: 100%;
 }
-*, *:before, *:after {
+
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
-body{
-  height:100%;
+body {
+  height: 100%;
   font-family: 'Lora', serif;
   font-size: 7vw;
   display: flex;
@@ -17,44 +20,54 @@ body{
   justify-content: center;
   align-items: center;
   text-align: center;
-
 }
 
-a{text-decoration: none}
-a:visited{ color:blue}
-a:active{ color:black}
-a:hover{ color:black}
+a {
+  text-decoration: none;
+}
 
-.container, .pop{
-  /*border: 1px solid black;*/
+a:visited {
+  color: blue;
+}
+
+a:active {
+  color: black;
+}
+
+a:hover {
+  color: black;
+}
+
+.container,
+.pop {
+  /* border: 1px solid black; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.pop{
-  position:absolute;
-  top:0px;
-  left:0px;
-  width:100%;
-  height:100%;
+.pop {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
   background-color: white;
   color: maroon;
   display: none;
 }
 
-
-.spin {  
-animation: cssAnimation 2s infinite ease;
+.spin {
+  animation: cssAnimation 2s infinite ease;
+  font-size: 128px;
 }
+
 @keyframes cssAnimation {
-from { transform: rotate(0deg)}
-to { transform: rotate(360deg)}
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-
-
-
-
-
-

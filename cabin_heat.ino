@@ -90,7 +90,7 @@ int ledToggle(String command) {
 }
 
 void autoShutoff() {
-    if tSinceStart > autotimer {
+    if (tSinceStart > autotimer) {
         digitalWrite(led,LOW);
         tSinceStart = 0;
     }
