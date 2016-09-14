@@ -82,7 +82,7 @@ $(function(){
             $.getJSON( 'forecast.php')
             .done(function( data ) {
               console.log(data)
-              outsideTemp = data.currently.apparentTemperature;
+              outsideTemp = data.currently.apparentTemperature
 
             if(timeSinceStart == 0){
               popup(
@@ -90,7 +90,7 @@ $(function(){
                 + '<br>' +
                 '🏠 ' + temperature + 'º'
                 + '<br>' +
-                'heat is off.'
+                '<span class="small">' + 'heat is off.' + '</span>'
                 // + '<br>' +
                 // humidity + '% humidity'
               )
@@ -102,10 +102,9 @@ $(function(){
                 + '<br>' +
                 'heat is on!'
                 + '<br>' +
-                tempRise + 'º rise in '
-                + hhmmss(timeSinceStart)
+                '<span class="small">' + tempRise + 'º rise in '+ hhmmss(timeSinceStart) + '</span>'
                 + '<br>' +
-                hhmmss(14000 - timeSinceStart ) + ' of heat remaining' //remember to change this value if we cnahge it in ||| cabin_heat.ino
+                '<span class="small">' + hhmmss(14000 - timeSinceStart ) + ' of heat remaining' + '</span>' //remember to change this value if we cnahge it in ||| cabin_heat.ino
                 // + '<br>' +
                 // humidity + '% humidity'
               )

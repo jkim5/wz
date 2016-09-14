@@ -22,6 +22,10 @@ body {
   text-align: center;
 }
 
+.small {
+  font-size: 4vw;
+}
+
 a {
   text-decoration: none;
 }
