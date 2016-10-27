@@ -5,7 +5,7 @@
   $lat = '45.1480915';
   $long = '-92.7287668';
 
-  $response = file_get_contents("https://api.forecast.io/forecast/" . $apikey ."/" . $lat . "," . $long );
+  $response = file_get_contents("https://api.darksky.net/forecast/" . $apikey ."/" . $lat . "," . $long );
 
 
   echo $response;

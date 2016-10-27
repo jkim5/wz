@@ -64,7 +64,7 @@ a:hover {
 
 .spin {
   animation: cssAnimation 2s infinite ease;
-  font-size: 128px;
+  font-size: 100px;
 }
 
 @keyframes cssAnimation {
