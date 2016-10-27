@@ -92,7 +92,7 @@ int ledToggle(String command) {
 void autoShutoff() {
     if (tSinceStart > autotimer) {
         digitalWrite(led,LOW);
-        tSinceStart = 0;
+        tSinceStart = 0;        // need to set to zero so that app.js returns "heat is off."
     }
 }
 
